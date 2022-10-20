@@ -1,5 +1,4 @@
-function getPostId() {
-  const linkedinURL= document.querySelector("#url").value;
+function getPostId(linkedinURL) {
   const regex = /([0-9]{19})/;
   const postId = regex.exec(linkedinURL).pop();
   return postId;
@@ -15,13 +14,20 @@ function extractUnixTimestamp(postId) {
 
 function unixTimestampToHumanDate(timestamp) {
   const dateObject = new Date(timestamp);
-  const humanDateFormat = dateObject.toUTCString()+" (UTC)";
+  const humanDateFormat = dateObject.toUTCString() + " (UTC)";
   return humanDateFormat;
 }
 
 function getDate() {
-  const postId = getPostId();
-  const unixTimestamp = extractUnixTimestamp(postId);
+  const linkedinURL = document.querySelector("#url").value;
+  const unixTimestamp = extractUnixTimestampFromURL(linkedinURL);
   const humanDateFormat = unixTimestampToHumanDate(unixTimestamp);
   document.querySelector("#date").textContent = humanDateFormat;
 }
+
+function extractUnixTimestampFromURL(linkedinURL) {
+  const postId = getPostId(linkedinURL);
+  return extractUnixTimestamp(postId);
+}
+
+exports.extractUnixTimestampFromURL = extractUnixTimestampFromURL;
